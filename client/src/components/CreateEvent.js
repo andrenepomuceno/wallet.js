@@ -1,144 +1,126 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import '../App.css';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
 
-class CreateEvent extends Component {
-    constructor() {
-        super();
-        this.reset();
-    }
-
-    reset() {
-        this.state = {
-            date: Date.now(),
-            quantity: 1,
-            price: 1.00,
-            currency: 'BRL',
-            taxes: 0,
-            info: ''
-        };
-    }
-
-    onChange = e => {
-        this.setState({ [e.target.name]: e.target.value });
+export default function CreateEvent() {
+    const defaultEvent = {
+        date: Date.now(),
+        quantity: 1,
+        price: 1.00,
+        currency: 'BRL',
+        taxes: 0,
+        info: ''
     };
 
-    onSubmit = e => {
+    const [form, setForm] = useState(defaultEvent);
+    const navigate = useNavigate();
+
+    // These methods will update the state properties.
+    function updateForm(value) {
+        return setForm((prev) => {
+            return { ...prev, ...value };
+        });
+    }
+
+    // This function will handle the submission.
+    async function onSubmit(e) {
         e.preventDefault();
 
-        const data = {
-            date: this.state.date,
-            quantity: this.state.quantity,
-            price: this.state.price,
-            currency: this.state.currency,
-            taxes: this.state.taxes,
-            info: this.state.info
-        };
+        // When a post request is sent to the create url, we'll add a new record to the database.
+        const newEvent = { ...form };
 
-        axios
-            .post('http://localhost:8080/api/events', data)
-            .then(res => {
-                this.reset();
-                alert("Sucesso!");
-            })
-            .catch(err => {
-                console.log("Error in CreateEvent!");
-            })
-    };
+        await fetch("http://localhost:8080/api/events", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newEvent),
+        }).catch(error => {
+            window.alert(error);
+            return;
+        });
 
-    render() {
-        return (
-            <div className="CreateEvent">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-8 m-auto">
-                            <br />
-                            <Link to="/" className="btn btn-outline-warning float-left">
-                                Show Event List
-                            </Link>
-                        </div>
-                        <div className="col-md-8 m-auto">
-                            <h1 className="display-4 text-center">Add Event</h1>
-                            <p className="lead text-center">
-                                Create new event
-                            </p>
-                            <form noValidate onSubmit={this.onSubmit}>
-                                <div className='form-group'>
-                                    <label htmlFor="date">Date</label>
-                                    <input
-                                        type='date'
-                                        placeholder='Date'
-                                        name='date'
-                                        className='form-control'
-                                        value={this.state.date}
-                                        onChange={this.onChange}
-                                    />
-                                </div>
-                                <br />
-                                <div className='form-group'>
-                                    <label htmlFor="quantity">Quantity</label>
-                                    <input
-                                        type='number'
-                                        placeholder='0'
-                                        name='quantity'
-                                        className='form-control'
-                                        value={this.state.quantity}
-                                        onChange={this.onChange}
-                                    />
-                                </div>
-                                <div className='form-group'>
-                                    <label htmlFor="price">Price</label>
-                                    <input
-                                        type='number'
-                                        placeholder='0'
-                                        name='price'
-                                        className='form-control'
-                                        value={this.state.price}
-                                        onChange={this.onChange}
-                                    />
-                                </div>
-                                <div className='form-group'>
-                                    <label htmlFor="currency">Currency</label>
-                                    <input
-                                        type='text'
-                                        placeholder='Currency'
-                                        name='currency'
-                                        className='form-control'
-                                        value={this.state.currency}
-                                        onChange={this.onChange}
-                                    />
-                                </div>
-                                <div className='form-group'>
-                                    <label htmlFor="taxes">Taxes</label>
-                                    <input
-                                        type='number'
-                                        placeholder='0'
-                                        name='taxes'
-                                        className='form-control'
-                                        value={this.state.taxes}
-                                        onChange={this.onChange}
-                                    />
-                                </div>
-                                <div className='form-group'>
-                                    <label htmlFor="info">Info</label>
-                                    <input
-                                        type='text'
-                                        placeholder='Info'
-                                        name='info'
-                                        className='form-control'
-                                        value={this.state.info}
-                                        onChange={this.onChange}
-                                    />
-                                </div>
-                                <input type="submit" className="btn btn-outline-warning btn-block mt-4" />
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+        setForm(defaultEvent);
+        navigate("/");
     }
-}
 
-export default CreateEvent;
+    // This following section will display the form that takes the input from the user.
+    return (
+        <div className="container">
+            <h3>Create New Event</h3>
+            <form onSubmit={onSubmit}>
+                <div className='form-group'>
+                    <label htmlFor="date">Date</label>
+                    <input
+                        type='date'
+                        name='date'
+                        className='form-control'
+                        value={form.date}
+                        onChange={(e) => updateForm({ date: e.target.value })}
+                    />
+                </div>
+                <div className='form-group'>
+                    <label htmlFor="quantity">Quantity</label>
+                    <input
+                        type='number'
+                        placeholder='0'
+                        name='quantity'
+                        className='form-control'
+                        value={form.quantity}
+                        onChange={(e) => updateForm({ quantity: e.target.value })}
+                    />
+                </div>
+                <div className='form-group'>
+                    <label htmlFor="price">Price</label>
+                    <input
+                        type='number'
+                        placeholder='0'
+                        name='price'
+                        className='form-control'
+                        value={form.price}
+                        onChange={(e) => updateForm({ price: e.target.value })}
+                    />
+                </div>
+                <div className='form-group'>
+                    <label htmlFor="currency">Currency</label>
+                    <input
+                        type='text'
+                        placeholder='Currency'
+                        name='currency'
+                        className='form-control'
+                        value={form.currency}
+                        onChange={(e) => updateForm({ currency: e.target.value })}
+                    />
+                </div>
+                <div className='form-group'>
+                    <label htmlFor="taxes">Taxes</label>
+                    <input
+                        type='number'
+                        placeholder='0'
+                        name='taxes'
+                        className='form-control'
+                        value={form.taxes}
+                        onChange={(e) => updateForm({ taxes: e.target.value })}
+                    />
+                </div>
+                <div className='form-group'>
+                    <label htmlFor="info">Info</label>
+                    <input
+                        type='text'
+                        placeholder='Info'
+                        name='info'
+                        className='form-control'
+                        value={form.info}
+                        onChange={(e) => updateForm({ info: e.target.value })}
+                    />
+                </div>
+                <div className="form-group">
+                    <input
+                        type="submit"
+                        value="Create"
+                        className="btn btn-primary"
+                    />
+                </div>
+            </form>
+        </div>
+    );
+}

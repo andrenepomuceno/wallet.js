@@ -70,21 +70,23 @@ export default function EventList() {
 
     // This following section will display the table with the records of individuals.
     return (
-        <div>
-            <h3>Event List</h3>
-            <table className="table table-striped" style={{ marginTop: 20 }}>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Currency</th>
-                        <th>Taxes</th>
-                        <th>Info</th>
-                    </tr>
-                </thead>
-                <tbody>{eventList()}</tbody>
-            </table>
+        <div class="EventList">
+            <div class="container">
+                <h1>Event List</h1>
+                <table className="table table-striped" style={{ marginTop: 20 }}>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Currency</th>
+                            <th>Taxes</th>
+                            <th>Info</th>
+                        </tr>
+                    </thead>
+                    <tbody>{eventList()}</tbody>
+                </table>
+            </div>
         </div>
     );
 }
