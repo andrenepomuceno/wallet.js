@@ -27,6 +27,10 @@ const EventSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    parent: {
+        type: String,
+        required: false,
+    }
 });
 
 module.exports = Event = mongoose.model('event', EventSchema);
