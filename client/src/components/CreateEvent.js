@@ -45,7 +45,7 @@ export default function CreateEvent() {
 
     // This following section will display the form that takes the input from the user.
     return (
-        <div className="container">
+        <div>
             <h3>Create New Event</h3>
             <form onSubmit={onSubmit}>
                 <div className='form-group'>
