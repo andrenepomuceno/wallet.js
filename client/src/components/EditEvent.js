@@ -33,6 +33,7 @@ export default function EditEvent() {
         return;
       }
 
+      console.log(event.date);
       setForm(event);
     }
 
@@ -76,7 +77,7 @@ export default function EditEvent() {
             name='date'
             className='form-control'
             value={form.date}
-            onChange={(e) => updateForm({ date: e.target.value })}
+            onChange={(e) => {updateForm({ date: e.target.value })}}
           />
         </div>
         <div className='form-group'>

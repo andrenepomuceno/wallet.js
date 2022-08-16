@@ -9,6 +9,7 @@ const Event = (props) => (
         <td>{props.event.currency}</td>
         <td>{props.event.taxes}</td>
         <td>{props.event.info}</td>
+        <td>{props.event.total}</td>
         <td>
             <Link className="btn btn-link" to={`/edit/${props.event._id}`}>Edit</Link> |
             <button className="btn btn-link"
@@ -58,6 +59,7 @@ export default function EventList() {
     // This method will map out the records on the table
     function eventList() {
         return events.map((event) => {
+            event.total = event.quantity * event.price + event.taxes;
             return (
                 <Event
                     event={event}
@@ -65,26 +67,27 @@ export default function EventList() {
                     key={event._id}
                 />
             );
-        });
-    }
+    });
+}
 
-    // This following section will display the table with the records of individuals.
-    return (
-        <div>
-            <h1>Event List</h1>
-            <table className="table table-striped" style={{ marginTop: 20 }}>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Currency</th>
-                        <th>Taxes</th>
-                        <th>Info</th>
-                    </tr>
-                </thead>
-                <tbody>{eventList()}</tbody>
-            </table>
-        </div>
-    );
+// This following section will display the table with the records of individuals.
+return (
+    <div>
+        <h1>Event List</h1>
+        <table className="table table-striped" style={{ marginTop: 20 }}>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Currency</th>
+                    <th>Taxes</th>
+                    <th>Info</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>{eventList()}</tbody>
+        </table>
+    </div>
+);
 }

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 
 export default function CreateEvent() {
     const defaultEvent = {
-        date: Date.now(),
+        date: "2022-01-01",
         quantity: 1,
         price: 1.00,
         currency: 'BRL',
@@ -46,7 +46,7 @@ export default function CreateEvent() {
     // This following section will display the form that takes the input from the user.
     return (
         <div>
-            <h3>Create New Event</h3>
+            <h3>Create Event</h3>
             <form onSubmit={onSubmit}>
                 <div className='form-group'>
                     <label htmlFor="date">Date</label>
